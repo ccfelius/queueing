@@ -5,10 +5,15 @@ import numpy as np
 
 
 # RANDOM_SEED = 33
-SERVERS = 2  # Amount of servers (n)
-LAMBDA = 3  # interarrival times
-SERVICETIME = 3
-SIM_TIME = 60     # Simulation time in minutes
+SERVERS = 2 # Amount of servers (n)
+LAMBDA = 1.8  # exponential interarrival times
+# e.g. Lambda = 3 gives 1/3 per unit in simulation time, so avg is around every 0.33 timestep a new customer occurs
+# 0.33 timestep could be 0.33 hour = 0.33*60 = 19.8 minutes (on average)
+
+MU = 1 # exponential service times
+# MU > LAMBDA, otherwise no or barely a queue. If mu = 2, avg is every 0.5 timestep is the timecosts of a service.
+
+SIM_TIME = 24 # simulation time in time units
 
 
 class Queue(object):
@@ -21,7 +26,7 @@ class Queue(object):
 
     def service(self, customer):
         """The process"""
-        yield self.env.timeout(np.random.poisson(SERVICETIME, 1)[0])
+        yield self.env.timeout(np.random.exponential(1/MU, 1)[0])
 
 
 def customer(env, name, qu):
@@ -44,7 +49,7 @@ def setup(env, servers, servicetime, t_inter):
     approx. every ``t_inter`` minutes."""
 
     # Create the queue system
-    queue = Queue(env, SERVERS, SERVICETIME)
+    queue = Queue(env, SERVERS, MU)
 
     # Create 1 initial customer
     for i in range(3):
@@ -52,7 +57,7 @@ def setup(env, servers, servicetime, t_inter):
 
     # Create more customers while the simulation is running
     while True:
-        yield env.timeout(np.random.poisson(LAMBDA, 1)[0])
+        yield env.timeout(np.random.exponential(1/LAMBDA, 1)[0])
         i += 1
         env.process(customer(env, 'Customer %d' % i, queue))
 
@@ -63,7 +68,11 @@ print('Queue Simulation')
 
 # Create an environment and start the setup process
 env = simpy.Environment()
-env.process(setup(env, SERVERS, SERVICETIME, LAMBDA))
+env.process(setup(env, SERVERS, MU, LAMBDA))
 
 # Execute!
 env.run(until=SIM_TIME)
+
+rho = LAMBDA/(SERVERS*MU)
+
+print(f'Occupation rate per server: {rho:.3f}')
