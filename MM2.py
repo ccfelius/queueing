@@ -4,79 +4,66 @@ import numpy as np
 
 
 
-RANDOM_SEED = 42
-NUM_MACHINES = 2  # Number of machines in the carwash
-servicetime = 5      # Minutes it takes to clean a car
-Lambda = 5       # Create a car every ~7 minutes
-SIM_TIME = 40     # Simulation time in minutes
+# RANDOM_SEED = 33
+SERVERS = 2  # Amount of servers (n)
+LAMBDA = 3  # interarrival times
+SERVICETIME = 3
+SIM_TIME = 60     # Simulation time in minutes
 
 
-
-class Carwash(object):
-    """A carwash has a limited number of machines (``NUM_MACHINES``) to
-    clean cars in parallel.
-
-    Cars have to request one of the machines. When they got one, they
-    can start the washing processes and wait for it to finish (which
-    takes ``washtime`` minutes).
-
+class Queue(object):
     """
-    def __init__(self, env, num_machines, washtime):
+    """
+    def __init__(self, env, servers, servicetime):
         self.env = env
-        self.machine = simpy.Resource(env, num_machines)
-        self.washtime = washtime
+        self.server = simpy.Resource(env, servers)
+        self.servicetime = servicetime
 
-    def wash(self, car):
-        """The washing processes. It takes a ``car`` processes and tries
-        to clean it."""
-        yield self.env.timeout(np.random.poisson(servicetime, 1)[0])
-        # print("Carwash removed %d%% of %s's dirt." %
-        #       (random.randint(50, 99), car))
+    def service(self, customer):
+        """The process"""
+        yield self.env.timeout(np.random.poisson(SERVICETIME, 1)[0])
 
 
-def car(env, name, cw):
-    """The car process (each car has a ``name``) arrives at the carwash
-    (``cw``) and requests a cleaning machine.
-
-    It then starts the washing process, waits for it to finish and
-    leaves to never come back ...
-
+def customer(env, name, qu):
+    """Each customer has a ``name`` and requests a server
+    Subsequently, it starts a process.
     """
-    print('%s arrives at the carwash at %.2f.' % (name, env.now))
-    with cw.machine.request() as request:
+
+    print('%s arrives at the servicedesk at %.2f.' % (name, env.now))
+    with qu.server.request() as request:
         yield request
 
-        print('%s enters the carwash at %.2f.' % (name, env.now))
-        yield env.process(cw.wash(name))
+        print('%s enters the servicedesk at %.2f.' % (name, env.now))
+        yield env.process(qu.service(name))
 
-        print('%s leaves the carwash at %.2f.' % (name, env.now))
+        print('%s leaves the servicedesk at %.2f.' % (name, env.now))
 
 
-def setup(env, num_machines, washtime, t_inter):
-    """Create a carwash, a number of initial cars and keep creating cars
+def setup(env, servers, servicetime, t_inter):
+    """Create a queue, a number of initial customers and keep creating customers
     approx. every ``t_inter`` minutes."""
-    # Create the carwash
-    carwash = Carwash(env, num_machines, washtime)
 
-    # Create 4 initial cars
-    for i in range(4):
-        env.process(car(env, 'Car %d' % i, carwash))
+    # Create the queue system
+    queue = Queue(env, SERVERS, SERVICETIME)
 
-    # Create more cars while the simulation is running
+    # Create 1 initial customer
+    for i in range(3):
+        env.process(customer(env, 'Customer %d' % i, queue))
+
+    # Create more customers while the simulation is running
     while True:
-        yield env.timeout(np.random.poisson(Lambda, 1)[0])
+        yield env.timeout(np.random.poisson(LAMBDA, 1)[0])
         i += 1
-        env.process(car(env, 'Car %d' % i, carwash))
+        env.process(customer(env, 'Customer %d' % i, queue))
 
 
 # Setup and start the simulation
-print('Carwash')
-print('Check out http://youtu.be/fXXmeP9TvBg while simulating ... ;-)')
-random.seed(RANDOM_SEED)  # This helps reproducing the results
+print('Queue Simulation')
+# random.seed(RANDOM_SEED)  # This helps reproducing the results
 
 # Create an environment and start the setup process
 env = simpy.Environment()
-env.process(setup(env, NUM_MACHINES, servicetime, Lambda))
+env.process(setup(env, SERVERS, SERVICETIME, LAMBDA))
 
 # Execute!
 env.run(until=SIM_TIME)
