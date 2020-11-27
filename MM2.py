@@ -98,8 +98,9 @@ print('QUEUE SIMULATION\n')
 
 # set the amount of simulations per server instellingen
 SIMULATIONS = 200
+print(f'Simulations: {SIMULATIONS}')
 
-for servers in range(1,3):
+for servers in range(1, 3):
     # Create dataframe to store important values to calculate statistics
     cols = ['AVG_WAITING', 'AVG_ARRIVING', 'AVG_LEAVING']
     data = pd.DataFrame(columns=cols)
@@ -151,8 +152,12 @@ for servers in range(1,3):
     print(f'AVG waiting: {data["AVG_WAITING"].mean():.3f} time units')
     print(conf_int(data["AVG_WAITING"].mean(), data["AVG_WAITING"].var(), SIMULATIONS, p=0.95))
     print()
-    print(f'AVG arriving: {data["AVG_ARRIVING"].mean():.3f} time units')
+    print(f'AVG arriving: {data["AVG_ARRIVING"].mean():.3f} per time unit')
     print(conf_int(data["AVG_ARRIVING"].mean(), data["AVG_ARRIVING"].var(), SIMULATIONS, p=0.95))
     print()
-    print(f'AVG leaving: {data["AVG_LEAVING"].mean():.3f} time units')
+    print(f'AVG leaving: {data["AVG_LEAVING"].mean():.3f} per time unit')
     print(conf_int(data["AVG_LEAVING"].mean(), data["AVG_LEAVING"].var(), SIMULATIONS, p=0.95))
+
+
+# Make sure we need to variate rho?
+# also write to a file needs to be done
