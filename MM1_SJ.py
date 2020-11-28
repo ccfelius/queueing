@@ -24,10 +24,6 @@ def conf_int(mean, var, n, p=0.95):
 
 RHO = 0.9
 MU = 20 # 1/mu is exponential service times
-# MU > LAMBDA, if  mu = 1 and c is 1 otherwise no queue.
-# 1/MU > 1/LAMBDA if c=2 or higher?
-# If mu = 2, avg is every 0.5 time step is the time costs of a service.
-# suppose lambda < 1
 SIM_TIME = 100 # simulation time in time units
 
 class Queue(object):
@@ -93,7 +89,7 @@ def setup(env, servers, servicetime, t_inter):
     while True:
         yield env.timeout(np.random.exponential(1/LAMBDA, 1)[0])
         i += 1
-        env.process(customer(env, f'Customer {i}', queue, np.random.exponential(1/LAMBDA, 1)[0]))
+        env.process(customer(env, f'Customer {i}', queue, np.random.exponential(1/MU, 1)[0]))
 
 
 
@@ -113,6 +109,7 @@ SERVERS = 1
 LAMBDA = RHO * (MU * SERVERS)  # 1/lambda is exponential inter arrival times
 
 print("EXPECTED VALUES AND PROBABILITIES")
+# for shortest job expected values etc differ
 
 print(f'Rho: {RHO}\nMu: {MU}\nLambda: {LAMBDA}\nExpected interarrival time: {1 / LAMBDA:.2f} time units')
 print(f'Expected processing time per server: {1 / MU:.2f} time units\n')
