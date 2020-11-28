@@ -4,7 +4,7 @@ import random
 import simpy
 import numpy as np
 import math
-from queueing.probabilities import *
+from probabilities import *
 import pandas as pd
 import scipy.stats as st
 
@@ -102,7 +102,7 @@ print('QUEUE SIMULATION\n')
 SIMULATIONS = 10
 print(f'Simulations: {SIMULATIONS}')
 
-for servers in range(1, 4):
+for servers in [1, 2, 4]:
     # Create dataframe to store important values to calculate statistics
     cols = ['AVG_WAITING', 'AVG_ARRIVING', 'AVG_LEAVING']
     data = pd.DataFrame(columns=cols)
