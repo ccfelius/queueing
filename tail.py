@@ -149,6 +149,3 @@ for servers in [1,2,4]:
     print(conf_int(data["AVG_LEAVING"].mean(), data["AVG_LEAVING"].var(), SIMULATIONS, p=0.95))
 
 print("DONE")
-
-# Make sure we need to variate rho?
-# also write to a file needs to be done
