@@ -100,7 +100,7 @@ print('QUEUE SIMULATION\n')
 SIMULATIONS = 200
 print(f'Simulations: {SIMULATIONS}')
 
-for servers in range(1, 3):
+for servers in [1, 2, 4]:
     # Create dataframe to store important values to calculate statistics
     cols = ['AVG_WAITING', 'AVG_ARRIVING', 'AVG_LEAVING']
     data = pd.DataFrame(columns=cols)
