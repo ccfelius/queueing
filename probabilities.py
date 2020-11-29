@@ -1,6 +1,23 @@
 # imports
 import math
+import scipy.stats as st
 
+def conf_int(mean, var, n, p=0.95):
+    """
+    Calculate a confidence interval
+    :param mean: mean of simulations
+    :param var: variance of simulations
+    :param n: amount of simulations
+    :param p: certainty percentage
+    :return:
+    """
+    pnew = (p+1)/2
+    zval = st.norm.ppf(pnew)
+    sigma = math.sqrt(var)
+    alambda = (zval*sigma)/math.sqrt(n)
+    min_lambda = mean - alambda
+    plus_lambda = mean + alambda
+    return f"Confidence interval: [{min_lambda:.4f} < X < {plus_lambda:.4f}] with p = {p}"
 
 def calc_rho(mu, lbda, c):
     return lbda/(c*mu)
