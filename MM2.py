@@ -77,13 +77,11 @@ print('QUEUE SIMULATION\n')
 
 # Set servers = 1
 # set the amount of simulations
-SIMULATIONS = 10
+SIMULATIONS = 150
 column = ['RHO', 'SIM_TIME', 'AVG_WAIT']
 data_sims = []
-run_data = pd.DataFrame(columns=column)
 SERVERS = 2 # fixed
-# RHO = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-RHO = [0.9, 0.1]
+RHO = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 MU = 1
 simtimes = [5, 25, 100, 150]
 # simtimes[0] = 1
@@ -103,8 +101,6 @@ for rho in RHO:
 
             waiting_time = 0
             counter = 0
-            # arrivals = 0
-            # leavers = 0
 
             # Create an environment and start the setup process
             env = simpy.Environment()
@@ -114,8 +110,6 @@ for rho in RHO:
             env.run(until=SIM_TIME)
 
             avg_waiting = waiting_time/(counter)
-            # avg_arrivals = arrivals/SIM_TIME
-            # avg_leavers = leavers/SIM_TIME
 
             data.loc[s] = [rho, SIM_TIME, avg_waiting]
 
@@ -123,4 +117,4 @@ for rho in RHO:
 
 print(pd.concat(data_sims))
 
-pd.concat(data_sims).to_csv('test.txt', sep='\t', index=False)
+pd.concat(data_sims).to_csv('data/test.txt', sep='\t', index=False)
