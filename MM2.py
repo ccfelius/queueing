@@ -77,13 +77,13 @@ print('QUEUE SIMULATION\n')
 
 # Set servers = 1
 # set the amount of simulations
-SIMULATIONS = 150
+SIMULATIONS = 1000
 column = ['RHO', 'SIM_TIME', 'AVG_WAIT']
 data_sims = []
 SERVERS = 2 # fixed
 RHO = [0.1, 0.5, 0.9]
 MU = 1
-simtimes = [5, 25, 100, 150]
+simtimes = [5, 25, 100, 150, 1000]
 
 # Simulations
 for rho in RHO:
@@ -116,4 +116,4 @@ for rho in RHO:
 
 print(pd.concat(data_sims))
 
-pd.concat(data_sims).to_csv('data/test2.txt', sep='\t', index=False)
+pd.concat(data_sims).to_csv('data/1000sims_1000time.txt', sep='\t', index=False)
