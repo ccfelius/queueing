@@ -81,10 +81,9 @@ SIMULATIONS = 150
 column = ['RHO', 'SIM_TIME', 'AVG_WAIT']
 data_sims = []
 SERVERS = 2 # fixed
-RHO = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+RHO = [0.1, 0.5, 0.9]
 MU = 1
 simtimes = [5, 25, 100, 150]
-# simtimes[0] = 1
 
 # Simulations
 for rho in RHO:
@@ -117,4 +116,4 @@ for rho in RHO:
 
 print(pd.concat(data_sims))
 
-pd.concat(data_sims).to_csv('data/test.txt', sep='\t', index=False)
+pd.concat(data_sims).to_csv('data/test2.txt', sep='\t', index=False)
