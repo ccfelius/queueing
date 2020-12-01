@@ -57,3 +57,6 @@ In this file the statistical properties of simulations for rho=0.9 are calculate
 
 - dataprocessing.py<br> 
 This file generates a plot in which for every rho ([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]) and simulation times 5, 50, 500 and 1000 the average waiting time is plotted. The amount of servers is 2.
+
+- Data folder<br>
+In the datafolder all data of the previously mentioned simulations used to create the plots in the report are collected in this file. 
