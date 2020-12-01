@@ -3,6 +3,7 @@ import pandas as pd
 import math
 import numpy as np
 from scipy import stats
+import seaborn as sns
 
 data = pd.read_csv("data/500-4.txt", sep="\t")
 
@@ -24,7 +25,7 @@ print("DONE")
 print("\n START MEAN, STDEV, CONF INT")
 
 data = pd.read_csv(f"data/500-2.txt", sep="\t")
-example = data[data["SIM_TIME"] == 25]
+example = data[data["SIM_TIME"] == 150]
 example1 = data[data["SIM_TIME"] == 500]
 ex = example[example['RHO'] == 0.1]['AVG_WAIT']
 ex2 = example1[example1['RHO'] == 0.1]['AVG_WAIT']
@@ -40,16 +41,20 @@ print(ex_9.std(), ex2_9.std())
 
 fig = plt.figure(facecolor='w')
 ax = fig.add_subplot(111, facecolor='whitesmoke', axisbelow=True)
-ax.hist(ex_9, bins = 100, alpha=0.5, color = 'cornflowerblue')
-ax.hist(ex2_9, bins = 100, alpha = 0.6, color='springgreen')
-ax.set_xlabel(r'$Mean waiting time / time unit$', fontsize=12)
+ax.hist(ex_9, bins = 100, alpha=0.8, color = 'cornflowerblue', label="Simtime=150")
+ax.hist(ex2_9, bins = 100, alpha = 0.5, color='springgreen', label="Simtime=500")
+# sns.displot(ex_9,)
+# sns.displot(ex2_9)
+ax.set_xlabel('Mean waiting time / time unit', fontsize=12)
 ax.set_ylabel('Density', fontsize=12)
 ax.set_title('Distribution mean waiting time', fontsize = 14)
 ax.yaxis.set_tick_params(length=0)
 ax.xaxis.set_tick_params(length=0)
 ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+legend = ax.legend()
+legend.get_frame().set_alpha(0.5)
 for spine in ('top', 'right', 'bottom', 'left'):
     ax.spines[spine].set_visible(False)
 
-plt.savefig("plots/histogram-25-500.png", dpi=300)
+plt.savefig("plots/histogram-150-500-01.png", dpi=300)
 plt.show()
