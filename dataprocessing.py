@@ -6,52 +6,93 @@ from scipy import stats
 
 data = pd.read_csv("data/500-4.txt", sep="\t")
 
-
-# df_mut[df_mut['nameDest'] == 'C1848904242']
-
 # example1 = data[data["SIM_TIME"] == 500]
 
 simulations = 500
-simtime = 25
+simtimes = [5, 50, 150, 500, 1000]
 
-s1 = []
-s2 = []
-s4 = []
-s1_dev = []
-s2_dev = []
-s4_dev = []
+# for i in [1, 2, 4]:
+#     data = pd.read_csv(f"data/500-{i}.txt", sep="\t")
+#     example = data[data["SIM_TIME"] == simtime]
 
-for i in [1, 2, 4]:
-    data = pd.read_csv(f"data/500-{i}.txt", sep="\t")
+
+st_5 = []
+st_50 = []
+st_150 = []
+st_500 = []
+st_1000 = []
+
+sim_5 = []
+sim_50 = []
+sim_150 = []
+sim_500 = []
+sim_1000 = []
+
+for simtime in simtimes:
+    data = pd.read_csv(f"data/1000-2.txt", sep="\t")
     example = data[data["SIM_TIME"] == simtime]
 
     for r in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]:
-        if i == 1:
-            s1.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
-            s1_dev.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
+        if simtime == 5:
+            sim_5.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
+            st_5.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
                           math.sqrt(simulations))
-        elif i == 2:
-            s2.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
-            s2_dev.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
+        elif simtime == 50:
+            sim_50.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
+            st_50.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
+                          math.sqrt(simulations))
+        elif simtime == 150:
+            sim_150.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
+            st_150.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
+                          math.sqrt(simulations))
+        elif simtime == 500:
+            sim_500.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
+            st_500.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
                           math.sqrt(simulations))
         else:
-            s4.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
-            s4_dev.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
+            sim_1000.append(example[example['RHO'] == r]['AVG_WAIT'].mean())
+            st_1000.append(1.96 * example[example['RHO'] == r]['AVG_WAIT'].std() /
                           math.sqrt(simulations))
 
 
 rhos = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]
 
-fig, ax = plt.subplots()
-ax.plot(rhos, s1, color="lightskyblue", label="1 Server")
-ax.plot(rhos, s2, color="deeppink", label="2 Servers")
-ax.plot(rhos, s4, color="darkgrey", label="4 Servers")
-ax.fill_between(rhos, [a - b for a, b in zip(s1, s1_dev)], [a + b for a, b in zip(s1, s1_dev)], color='lightskyblue', alpha=.1)
-ax.fill_between(rhos, [a - b for a, b in zip(s2, s2_dev)], [a + b for a, b in zip(s2, s2_dev)], color='deeppink', alpha=.1)
-ax.fill_between(rhos, [a - b for a, b in zip(s4, s4_dev)], [a + b for a, b in zip(s4, s4_dev)], color='darkgrey', alpha=.1)
-plt.title(f"Mean waiting time (Simtime={simtime})", fontsize=16)
-plt.legend()
+
+fig = plt.figure(facecolor='w')
+ax = fig.add_subplot(111, facecolor='whitesmoke', axisbelow=True)
+ax.plot(rhos, sim_5, 'cornflowerblue', alpha=1, lw=2, label='Simtime=5')
+ax.plot(rhos, sim_50, 'deeppink', alpha=0.8, lw=2, label='Simtime=50')
+ax.plot(rhos, sim_150, 'springgreen', alpha=0.6, lw=2, label='Simtime=150')
+ax.plot(rhos, sim_500, 'black', alpha=0.6, lw=2, label='Simtime=500')
+ax.plot(rhos, sim_1000, 'grey', alpha=0.6, lw=2, label='Simtime=1000')
+
+ax.fill_between(rhos, [a - b for a, b in zip(sim_5, st_5)], [a + b for a, b in zip(sim_5, st_5)], color='cornflowerblue', alpha=.1)
+ax.fill_between(rhos, [a - b for a, b in zip(sim_50, st_50)], [a + b for a, b in zip(sim_50, st_50)], color='deeppink', alpha=.1)
+ax.fill_between(rhos, [a - b for a, b in zip(sim_150, st_150)], [a + b for a, b in zip(sim_150, st_150)], color='springgreen', alpha=.1)
+ax.fill_between(rhos, [a - b for a, b in zip(sim_500, st_500)], [a + b for a, b in zip(sim_500, st_500)], color='black', alpha=.1)
+ax.fill_between(rhos, [a - b for a, b in zip(sim_1000, st_1000)], [a + b for a, b in zip(sim_1000, st_1000)], color='grey', alpha=.1)
+
+ax.set_xlabel(r'$\rho$', fontsize=12)
+ax.set_ylabel('Waiting time / time unit', fontsize=12)
+ax.set_title('Mean waiting time', fontsize = 14)
+ax.yaxis.set_tick_params(length=0)
+ax.xaxis.set_tick_params(length=0)
+ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+legend = ax.legend()
+legend.get_frame().set_alpha(0.5)
+for spine in ('top', 'right', 'bottom', 'left'):
+    ax.spines[spine].set_visible(False)
+
+plt.savefig("plots/simtimes.png", dpi=300)
 plt.show()
+
+# plt.title(f"Mean waiting time (Simtime={simtime})", fontsize=16)
+# plt.legend()
+# plt.grid(True)
+# plt.xlabel(r"$\rho$")
+# plt.ylabel("Waiting time / time unit")
+# plt.savefig("plots/simtimes.png")
+# plt.show()
 
 print("DONE")
 
