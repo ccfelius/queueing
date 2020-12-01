@@ -21,9 +21,9 @@ scipy.stats<br>
 
 - MM2.py<br>
 We this file for various experiments, including the following:
-a) We can collect the data of MMC with 1, 2 and 4 servers by:
+We can collect the data of MMC with 1, 2 and 4 servers by:
 Setting RHO = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975], SIMULATIONS = 500, SIM_TIME= 500, MU = 1 and changing SERVERS each time we run for the values 1, 2 and lastly 4.<br>
-b) ...
+
 
 - MM1_SJ_data.py<br> 
 When executing this file we collect data of the M/M/1 queue with shortest job first scheduling with a varying rho. Using servers=2 we can compare this to M/M/2 using:  compare_124_processing.py 
@@ -57,6 +57,3 @@ In this file the statistical properties of simulations for rho=0.9 are calculate
 
 - dataprocessing.py<br> 
 This file generates a plot in which for every rho ([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]) and simulation times 5, 50, 500 and 1000 the average waiting time is plotted. The amount of servers is 2.
-
-- plot_q2.py<br> 
-This file generates a plot for servers c=1, c=2 and c=4 and their average waiting times.
