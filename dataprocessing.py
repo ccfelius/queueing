@@ -3,6 +3,7 @@ import pandas as pd
 import math
 import numpy as np
 from scipy import stats
+from queueing.probabilities import *
 
 data = pd.read_csv("data/500-4.txt", sep="\t")
 
@@ -27,6 +28,10 @@ sim_50 = []
 sim_150 = []
 sim_500 = []
 sim_1000 = []
+
+expected = []
+for i in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]:
+    expected.append(expw(1, 2, i))
 
 for simtime in simtimes:
     data = pd.read_csv(f"data/1000-2.txt", sep="\t")
@@ -65,6 +70,7 @@ ax.plot(rhos, sim_50, 'deeppink', alpha=0.8, lw=2, label='Simtime=50')
 ax.plot(rhos, sim_150, 'springgreen', alpha=0.6, lw=2, label='Simtime=150')
 ax.plot(rhos, sim_500, 'black', alpha=0.6, lw=2, label='Simtime=500')
 ax.plot(rhos, sim_1000, 'grey', alpha=0.6, lw=2, label='Simtime=1000')
+ax.plot(rhos, expected, 'black', alpha=1, lw=2, label='Expected Waiting Time')
 
 ax.fill_between(rhos, [a - b for a, b in zip(sim_5, st_5)], [a + b for a, b in zip(sim_5, st_5)], color='cornflowerblue', alpha=.1)
 ax.fill_between(rhos, [a - b for a, b in zip(sim_50, st_50)], [a + b for a, b in zip(sim_50, st_50)], color='deeppink', alpha=.1)
@@ -83,7 +89,7 @@ legend.get_frame().set_alpha(0.5)
 for spine in ('top', 'right', 'bottom', 'left'):
     ax.spines[spine].set_visible(False)
 
-plt.savefig("plots/simtimes.png", dpi=300)
+plt.savefig("plots/simtimes-exp.png", dpi=300)
 plt.show()
 
 # plt.title(f"Mean waiting time (Simtime={simtime})", fontsize=16)
@@ -113,10 +119,3 @@ for i in [1,2,4]:
     print("\nSTDEV 150, 500, rho 0.1, rho 0.9")
     print(ex.std(), ex2.std())
     print(ex_9.std(), ex2_9.std())
-
-# print(stats.chisquare(f_obs=ex, f_exp=ex2))
-
-# print(ex)
-
-# plt.hist(ex2, bins = 50)
-# plt.show()
