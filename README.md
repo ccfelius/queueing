@@ -36,3 +36,21 @@ The data of for example the MMC with 1, 2, 4 servers runs can be processed using
 
 - compare_2_processing.py<br> 
 When comparing 2 types queueing this file is used. 
+
+- MMM2-2000.py<br> 
+In this file an M/M/c system is simulated for rho=0.9. It is particularly used to gather data if the simulation time is highly increased.
+
+- histogram.py<br> 
+In this file histograms of the distribution of average waiting times for different simulation times are plotted.
+
+- probabilities.py<br> 
+This file is necessary for running the other files; in this file methods to calculate the expected queue length, the expected average waiting time and the confidence interval are stated.
+
+- tail.py<br> 
+A system with a long-tail distributed processing time can be simulated within this file. Mu = 1 for 75% of the time, but Mu=5 for 25% of the time.
+
+- proc_09.py<br> 
+In this file the statistical properties of simulations for rho=0.9 are calculated. The data is read from the data/ folder and subsequently the results are denoted in table 3 in the report.
+
+- dataprocessing.py<br> 
+This file generates a plot in which for every rho ([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]) and simulation times 5, 50, 500 and 1000 the average waiting time is plotted. The amount of servers is 2.
