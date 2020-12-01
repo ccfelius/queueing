@@ -6,6 +6,7 @@ from queueing.probabilities import *
 import pandas as pd
 import scipy.stats as st
 
+
 class Queue(object):
     """
     Create the initial object queue
@@ -16,12 +17,12 @@ class Queue(object):
         self.server = simpy.Resource(env, servers)
         self.servicetime = servicetime
 
-    def service(self, customer):
+    def service(self, customer, servicetime):
         """The process"""
-        yield self.env.timeout(np.random.exponential(1/MU, 1)[0])
+        yield self.env.timeout(np.random.exponential(1/servicetime, 1)[0])
 
 
-def customer(env, name, qu):
+def customer(env, name, qu, servicetime):
     """Each customer has a ``name`` and requests a server
     Subsequently, it starts a process.
     need to do sthis differently though...
@@ -47,27 +48,27 @@ def customer(env, name, qu):
         waiting_time += waitingtime
         counter += 1
 
-        yield env.process(qu.service(name))
+        yield env.process(qu.service(name, servicetime))
         # print('%s leaves the servicedesk at %.2f.' % (name, env.now))
         # leavers += 1
 
 
-def setup(env, servers, servicetime, t_inter):
+def setup(env, servers, servicetime, Lambda):
     """Create a queue, a number of initial customers and keep creating customers
     approx. every 1/lambda*60 minutes."""
     # Generate queue
-    queue = Queue(env, SERVERS, MU)
+    queue = Queue(env, servers, servicetime)
 
     # Create 1 initial customer
     # for i in range(1):
     i = 0
-    env.process(customer(env, f'Customer {i}', queue))
+    env.process(customer(env, f'Customer {i}', queue, servicetime))
 
     # Create more customers while the simulation is running
     while True:
-        yield env.timeout(np.random.exponential(1/LAMBDA, 1)[0])
+        yield env.timeout(np.random.exponential(1/Lambda, 1)[0])
         i += 1
-        env.process(customer(env, f'Customer {i}', queue))
+        env.process(customer(env, f'Customer {i}', queue, servicetime))
 
 
 
@@ -80,10 +81,10 @@ print('QUEUE SIMULATION\n')
 SIMULATIONS = 1000
 column = ['RHO', 'SIM_TIME', 'AVG_WAIT']
 data_sims = []
-SERVERS = 2 # fixed
-RHO = [0.1, 0.5, 0.9]
+SERVERS = 4 # fixed
+RHO = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.975]
 MU = 1
-simtimes = [5, 25, 100, 150, 1000]
+simtimes = [5, 10, 25, 50, 100, 150, 500, 1000]
 
 # Simulations
 for rho in RHO:
@@ -116,4 +117,4 @@ for rho in RHO:
 
 print(pd.concat(data_sims))
 
-pd.concat(data_sims).to_csv('data/1000sims_1000time.txt', sep='\t', index=False)
+pd.concat(data_sims).to_csv(f'data/1000-{SERVERS}.txt', sep='\t', index=False)
