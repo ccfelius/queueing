@@ -31,5 +31,5 @@ The data of the MMC with 1, 2, 4 servers runs can be processed using this file. 
 - MM1_SJ_data.py<br> 
 When executing this file we collect data of the M/M/1 queue with shortest job first scheduling with a varying rho. 
 
--MM1_SJ_processing.py<br> 
+- MM1_SJ_processing.py<br> 
 The previously collected can be processed by executing this file, a plot is created.
