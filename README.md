@@ -37,7 +37,7 @@ The data of for example the MMC with 1, 2, 4 servers runs can be processed using
 - compare_2_processing.py<br> 
 When comparing 2 types queueing this file is used. 
 
-- MMM2-2000.py<br> 
+- MM2-2000.py<br> 
 In this file an M/M/c system is simulated for rho=0.9. It is particularly used to gather data if the simulation time is highly increased.
 
 - histogram.py<br> 
@@ -48,6 +48,9 @@ This file is necessary for running the other files; in this file methods to calc
 
 - tail.py<br> 
 A system with a long-tail distributed processing time can be simulated within this file. Mu = 1 for 75% of the time, but Mu=5 for 25% of the time.
+
+- MDN.py<br> 
+In this file a deterministic M/D/c system can be simulated.
 
 - proc_09.py<br> 
 In this file the statistical properties of simulations for rho=0.9 are calculated. The data is read from the data/ folder and subsequently the results are denoted in table 3 in the report.
