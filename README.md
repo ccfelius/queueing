@@ -3,7 +3,10 @@ queueing theory in practice
 
 
 Assignment 2:  DES simulation assignment
-By: Amber den Hollander (10910441) and Lotte Felius (12368032)
+
+### License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Required Packages:
 numpy<br>
