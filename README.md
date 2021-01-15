@@ -1,8 +1,4 @@
-# queueing
-queueing theory in practice
-
-
-Assignment 2:  DES simulation assignment
+# Queueing: Discrete Event Simulation
 
 ### License
 
